@@ -1,0 +1,24 @@
+{
+  "id": "gga-status-board",
+  "title": "GGA Status Board",
+  "description": "Standalone status board for GURPS Game Aid /status chat commands.",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "GGA Macro Builder"
+    }
+  ],
+  "compatibility": {
+    "minimum": "11",
+    "verified": "12"
+  },
+  "esmodules": [
+    "scripts/gga-status-board.js"
+  ],
+  "styles": [
+    "styles/gga-status-board.css"
+  ],
+  "systems": [
+    "gurps"
+  ]
+}
