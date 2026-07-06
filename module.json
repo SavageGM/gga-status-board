@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "authors": [
     {
-      "name": "GGA Macro Builder"
+      "name": "SavageGM"
     }
   ],
   "compatibility": {
@@ -20,5 +20,8 @@
   ],
   "systems": [
     "gurps"
-  ]
+  ],
+  "url": "https://github.com/SavageGM/gga-status-board",
+  "manifest": "https://raw.githubusercontent.com/SavageGM/gga-status-board/main/module.json",
+  "download": "https://github.com/SavageGM/gga-status-board/archive/refs/heads/main.zip"
 }
