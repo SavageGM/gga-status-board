@@ -1,0 +1,149 @@
+.gga-status-board-window .window-content {
+  padding: 0;
+  overflow: hidden;
+}
+
+.gga-status-board {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #1f1c18;
+  color: #eee5d2;
+}
+
+.gga-status-board-header {
+  flex: 0 0 auto;
+  padding: 8px;
+  background: #27231d;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.gga-status-board-selected {
+  padding: 6px;
+  margin-bottom: 6px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 4px;
+}
+
+.gga-status-board-controls {
+  display: grid;
+  grid-template-columns: 1fr 80px 80px;
+  gap: 6px;
+}
+
+.gga-status-board-controls input {
+  color: #eee5d2;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+}
+
+.gga-status-board-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.gga-status-board-body h3 {
+  margin: 8px 0 6px;
+  color: #f1d08a;
+  border-bottom: 1px solid rgba(241, 208, 138, 0.35);
+  padding-bottom: 3px;
+}
+
+.gga-status-board-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gga-status-board-row {
+  display: grid;
+  grid-template-columns: 34px minmax(160px, 1fr) 172px;
+  gap: 6px;
+  align-items: center;
+  padding: 4px 6px;
+  min-height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.gga-status-board-row.on {
+  border-color: rgba(130, 230, 130, 0.65);
+  background: rgba(80, 150, 80, 0.14);
+}
+
+.gga-status-board-row.mixed {
+  border-color: rgba(255, 220, 100, 0.75);
+  background: rgba(190, 145, 40, 0.14);
+}
+
+.gga-status-board-row.off {
+  opacity: 0.92;
+}
+
+.gga-status-board-row.none {
+  opacity: 0.65;
+}
+
+.gga-status-board-state {
+  font-size: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.gga-status-board-row.on .gga-status-board-state {
+  color: #8df58d;
+}
+
+.gga-status-board-row.mixed .gga-status-board-state {
+  color: #ffd966;
+}
+
+.gga-status-board-row.off .gga-status-board-state {
+  color: #aaa;
+}
+
+.gga-status-board-name span {
+  display: block;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gga-status-board-name code {
+  font-size: 11px;
+  color: #d6c49f;
+  opacity: 0.8;
+}
+
+.gga-status-board-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+}
+
+.gga-status-board-actions button {
+  padding: 2px 4px;
+  line-height: 20px;
+}
+
+.gga-status-board-empty {
+  padding: 8px;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.18);
+  border-radius: 4px;
+  opacity: 0.8;
+}
+
+.gga-status-board-footer {
+  flex: 0 0 auto;
+  padding: 6px 8px;
+  background: #27231d;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  font-size: 11px;
+  opacity: 0.82;
+}
