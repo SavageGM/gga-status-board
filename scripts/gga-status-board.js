@@ -78,9 +78,19 @@ function ggaStatusBoardEscapeHtml(value) {
   }[character]));
 }
 
-async function ggaStatusBoardSendCommand(action, statusId = "") {
+function ggaStatusBoardTurnsSuffix(turns) {
+  const numberOfTurns = Number.parseInt(turns, 10);
+  if (!Number.isFinite(numberOfTurns) || numberOfTurns < 1) return "";
+  return ` { turns: ${numberOfTurns} }`;
+}
+
+async function ggaStatusBoardSendCommand(action, statusId = "", options = {}) {
+  const turnsSuffix = statusId && ["on", "t"].includes(action) && options.useTurns
+    ? ggaStatusBoardTurnsSuffix(options.turns)
+    : "";
+
   const command = statusId
-    ? `/status ${action} ${statusId}`
+    ? `/status ${action} ${statusId}${turnsSuffix}`
     : `/status ${action}`;
 
   if (ui.chat?.processMessage) {
@@ -95,8 +105,8 @@ class GGAStatusBoardApplication extends Application {
     return foundry.utils.mergeObject(super.defaultOptions, {
       id: "gga-status-board",
       title: "GGA Status Board",
-      width: 620,
-      height: 720,
+      width: 680,
+      height: 740,
       resizable: true,
       classes: ["gga-status-board-window"]
     });
@@ -105,10 +115,19 @@ class GGAStatusBoardApplication extends Application {
   constructor(options = {}) {
     super(options);
     this.filter = game.settings.get(GGA_STATUS_BOARD_MODULE_ID, "filter") ?? "";
+    this.useTurns = game.settings.get(GGA_STATUS_BOARD_MODULE_ID, "useTurns") ?? false;
+    this.turns = game.settings.get(GGA_STATUS_BOARD_MODULE_ID, "turns") ?? 1;
   }
 
   get selectedTokens() {
     return canvas?.tokens?.controlled ?? [];
+  }
+
+  get commandOptions() {
+    return {
+      useTurns: this.useTurns,
+      turns: this.turns
+    };
   }
 
   _findStatusConfig(statusId) {
@@ -227,6 +246,8 @@ class GGAStatusBoardApplication extends Application {
     return {
       tokenNames: this.selectedTokens.map(token => token.name).join(", ") || "No selected tokens",
       filter: this.filter,
+      useTurns: this.useTurns,
+      turns: this.turns,
       allRows,
       activeRows
     };
@@ -264,6 +285,20 @@ class GGAStatusBoardApplication extends Application {
               Clear
             </button>
           </div>
+
+          <div class="gga-status-board-turns">
+            <label class="gga-status-board-turns-toggle">
+              <input type="checkbox" id="gga-status-board-use-turns" ${data.useTurns ? "checked" : ""}>
+              Expire at end of combat turns
+            </label>
+            <label class="gga-status-board-turns-value">
+              Turns
+              <input type="number" id="gga-status-board-turns" min="1" step="1" value="${Number.parseInt(data.turns, 10) || 1}">
+            </label>
+            <span class="gga-status-board-turns-help">
+              Applies to On and Toggle commands as <code>{ turns: x }</code>.
+            </span>
+          </div>
         </div>
 
         <div class="gga-status-board-body">
@@ -282,7 +317,7 @@ class GGAStatusBoardApplication extends Application {
           ✓ all selected have it &nbsp; | &nbsp;
           ◩ some selected have it &nbsp; | &nbsp;
           □ none have it &nbsp; | &nbsp;
-          Double-click row = Toggle
+          Double-click row = Toggle ${data.useTurns ? `with ${Number.parseInt(data.turns, 10) || 1} turn(s)` : ""}
         </div>
       </form>
     `);
@@ -330,11 +365,24 @@ class GGAStatusBoardApplication extends Application {
       this.render(false);
     }, 150));
 
+    html.find("#gga-status-board-use-turns").on("change", async event => {
+      this.useTurns = event.currentTarget.checked;
+      await game.settings.set(GGA_STATUS_BOARD_MODULE_ID, "useTurns", this.useTurns);
+      this.render(false);
+    });
+
+    html.find("#gga-status-board-turns").on("change", async event => {
+      const value = Math.max(1, Number.parseInt(event.currentTarget.value, 10) || 1);
+      this.turns = value;
+      await game.settings.set(GGA_STATUS_BOARD_MODULE_ID, "turns", this.turns);
+      this.render(false);
+    });
+
     html.find(".gga-status-board-row").on("dblclick", async event => {
       const statusId = event.currentTarget.dataset.statusId;
       if (!statusId) return;
 
-      await ggaStatusBoardSendCommand("t", statusId);
+      await ggaStatusBoardSendCommand("t", statusId, this.commandOptions);
       setTimeout(() => this.render(false), 250);
     });
 
@@ -348,7 +396,7 @@ class GGAStatusBoardApplication extends Application {
 
       if (!statusId || !action) return;
 
-      await ggaStatusBoardSendCommand(action, statusId);
+      await ggaStatusBoardSendCommand(action, statusId, this.commandOptions);
       setTimeout(() => this.render(false), 250);
     });
   }
@@ -371,6 +419,22 @@ Hooks.once("init", () => {
     config: false,
     type: String,
     default: ""
+  });
+
+  game.settings.register(GGA_STATUS_BOARD_MODULE_ID, "useTurns", {
+    name: "GGA Status Board Use Turns",
+    scope: "client",
+    config: false,
+    type: Boolean,
+    default: false
+  });
+
+  game.settings.register(GGA_STATUS_BOARD_MODULE_ID, "turns", {
+    name: "GGA Status Board Turns",
+    scope: "client",
+    config: false,
+    type: Number,
+    default: 1
   });
 
   game.keybindings.register(GGA_STATUS_BOARD_MODULE_ID, "open", {
