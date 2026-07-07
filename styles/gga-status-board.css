@@ -44,7 +44,8 @@
   gap: 8px;
 }
 
-.gga-status-board-controls input {
+.gga-status-board-controls input,
+.gga-status-board-turns input[type="number"] {
   min-height: 34px;
   color: #ffffff !important;
   background: #20262b !important;
@@ -56,6 +57,49 @@
 
 .gga-status-board-controls input::placeholder {
   color: #a8a8a8;
+}
+
+.gga-status-board-turns {
+  display: grid;
+  grid-template-columns: auto 120px 1fr;
+  gap: 10px;
+  align-items: center;
+  margin-top: 8px;
+  padding: 8px 10px;
+  background: #1d2328;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 5px;
+  color: #ffffff;
+}
+
+.gga-status-board-turns label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.gga-status-board-turns input[type="checkbox"] {
+  margin: 0;
+}
+
+.gga-status-board-turns input[type="number"] {
+  width: 64px;
+  text-align: center;
+}
+
+.gga-status-board-turns-help {
+  color: #d4d4d4;
+  font-size: 12px;
+}
+
+.gga-status-board-turns-help code {
+  color: #ffd36a;
+  background: transparent;
+  border: 0;
+  padding: 0;
 }
 
 .gga-status-board button,
@@ -235,7 +279,8 @@
 }
 
 @media (max-width: 620px) {
-  .gga-status-board-controls {
+  .gga-status-board-controls,
+  .gga-status-board-turns {
     grid-template-columns: 1fr;
   }
 
