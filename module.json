@@ -2,7 +2,7 @@
   "id": "gga-status-board",
   "title": "GGA Status Board",
   "description": "Standalone status board for GURPS Game Aid /status chat commands.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "authors": [
     {
       "name": "SavageGM"
